@@ -1,0 +1,40 @@
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { firebase } from "../firebase/config";
+import { useDispatch } from "react-redux";
+import { login } from "../actions/auth";
+import PrivateRouter from "./PrivateRouter";
+import AuthRouter from "./AuthRouter";
+import AppScreen from "../pages/AppScreen";
+import PublicRouter from "./PublicRouter";
+import { loadData } from "../helpers/loadData";
+import { leerRegistros } from "../actions/nomina";
+
+const AppRouter = () => {
+  const dispatch = useDispatch();
+
+  const [log, setLog] = useState(false);
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (user) {
+        dispatch(login(user.uid, user.displayName));
+        setLog(true);
+        const nominaData = await loadData(user.uid);
+        dispatch(leerRegistros(nominaData));
+      } else {
+        setLog(false);
+      }
+    });
+  }, [dispatch]);
+  return (
+    <Router>
+      <Switch>
+        <PublicRouter path="/auth" log={log} component={AuthRouter} />
+        <PrivateRouter exact path="/" log={log} component={AppScreen} />
+      </Switch>
+    </Router>
+  );
+};
+
+export default AppRouter;
