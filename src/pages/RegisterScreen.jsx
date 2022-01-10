@@ -32,7 +32,7 @@ const RegisterScreen = () => {
     if (password.trim().length < 6) {
       return;
     } else {
-      if (password.trim() !== password.trim()) {
+      if (password.trim() !== password2.trim()) {
         return;
       }
     }

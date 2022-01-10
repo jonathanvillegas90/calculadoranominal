@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 import { firebase } from "../firebase/config";
 import { useDispatch } from "react-redux";
 import { login } from "../actions/auth";
